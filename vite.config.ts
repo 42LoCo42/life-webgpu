@@ -33,6 +33,8 @@ function wgslenderPlugin(): Plugin {
 }
 
 export default defineConfig({
+	base: "./",
+
 	plugins: [wgslenderPlugin()],
 
 	server: {
