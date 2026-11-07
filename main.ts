@@ -125,7 +125,11 @@ import lifeRend from "./life.rend.wgsl?raw";
 	document.addEventListener("keydown", (e) => {
 		switch (e.key) {
 			case "f":
-				document.body.requestFullscreen();
+				if (document.fullscreenElement == null) {
+					document.body.requestFullscreen();
+				} else {
+					document.exitFullscreen();
+				}
 				break;
 
 			case "p":
