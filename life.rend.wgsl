@@ -25,15 +25,17 @@ fn vert_main(@builtin(vertex_index) index: u32) -> VertexOut {
 
 @fragment
 fn frag_main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {
-	let x = min(u32(pos.x), params.width - 1u);
-	let y = min(u32(pos.y), params.height - 1u);
-	let cur = src[y * params.width + x];
 	let colors = array<vec3<f32>, 4>(
 		vec3<f32>(0.0),
 		vec3<f32>(1.0, 0.0, 0.0),
 		vec3<f32>(1.0, 0.5, 0.0),
 		vec3<f32>(1.0, 1.0, 0.0),
 	);
+
+	let x = min(u32(pos.x), params.width - 1u);
+	let y = min(u32(pos.y), params.height - 1u);
+	let cur = src[y * params.width + x];
+
 	let color = colors[cur];
 	return vec4<f32>(color, 1.0);
 }
