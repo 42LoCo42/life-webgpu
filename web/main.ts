@@ -82,12 +82,18 @@ import lifeRend from "./life.rend.wgsl?raw";
 		}),
 	);
 
-	let paused = false;
+	enum Mode {
+		Paused,
+		Step,
+		Running,
+	}
+
+	let mode: Mode = Mode.Running;
 
 	function frame() {
 		const encoder = device.createCommandEncoder();
 
-		if (!paused) {
+		if (mode != Mode.Paused) {
 			const computePass = encoder.beginComputePass();
 			computePass.setPipeline(computePipeline);
 			computePass.setBindGroup(0, computeGroups[current]);
@@ -117,6 +123,7 @@ import lifeRend from "./life.rend.wgsl?raw";
 
 		device.queue.submit([encoder.finish()]);
 
+		if (mode == Mode.Step) mode = Mode.Paused;
 		requestAnimationFrame(frame);
 	}
 
@@ -124,6 +131,10 @@ import lifeRend from "./life.rend.wgsl?raw";
 
 	document.addEventListener("keydown", (e) => {
 		switch (e.key) {
+			case " ":
+				mode = Mode.Step;
+				break;
+
 			case "f":
 				if (document.fullscreenElement == null) {
 					document.body.requestFullscreen();
@@ -133,7 +144,7 @@ import lifeRend from "./life.rend.wgsl?raw";
 				break;
 
 			case "p":
-				paused = !paused;
+				mode = mode == Mode.Paused ? Mode.Running : Mode.Paused;
 				break;
 
 			case "r":

@@ -10,6 +10,7 @@ E.g. in Firefox, go to =about:config= and set =dom.webgpu.enabled= to =true=.
 Then, visit [[https://42loco42.github.io/lifegpu]]!
 
 ** Controls
+- Press Space to step once
 - Press F to toggle fullscreen
 - Press P to toggle pause
 - Press R to reset the board
