@@ -1,5 +1,5 @@
-/.direnv
-/.env
-/dist
-/node_modules
-/result
+.direnv
+.env
+dist
+node_modules
+result

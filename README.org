@@ -7,7 +7,7 @@ Check if you can use WebGPU in your browser: https://caniuse.com/webgpu.
 
 E.g. in Firefox, go to =about:config= and set =dom.webgpu.enabled= to =true=.
 
-Then, visit https://42loco42.github.io/life-webgpu!
+Then, visit [[https://42loco42.github.io/lifegpu]]!
 
 ** Controls
 - Press F to toggle fullscreen

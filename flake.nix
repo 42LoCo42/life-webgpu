@@ -3,40 +3,35 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        inherit (pkgs.lib.fileset) toSource unions;
+        mkSrc = x: pkgs.lib.fileset.toSource { root = x; fileset = x; };
       in
       rec {
-        packages.default = pkgs.stdenv.mkDerivation rec {
-          pname = "life-gpu";
-          version = "1.0.0";
+        packages = rec {
+          web = pkgs.stdenv.mkDerivation (drv: {
+            pname = "lifegpu-web";
+            version = "1.0.0";
+            src = mkSrc ./web;
 
-          src = toSource {
-            root = ./.;
-            fileset = unions [
-              ./index.html
-              ./life.comp.wgsl
-              ./life.rend.wgsl
-              ./main.ts
-              ./package.json
-              ./pnpm-lock.yaml
-              ./vite.config.ts
+            __structuredAttrs = true;
+            strictDeps = true;
+
+            nativeBuildInputs = with pkgs; [
+              nodejs
+              pnpm
+              pnpmConfigHook
             ];
-          };
 
-          nativeBuildInputs = with pkgs; [
-            nodejs
-            pnpm
-            pnpmConfigHook
-          ];
+            pnpmDeps = pkgs.fetchPnpmDeps {
+              inherit (drv) pname src version;
+              fetcherVersion = 4;
+              hash = "sha256-bEhiITFhnsLxXz4nVHxE2FFbBb3kXr53KM46s5P3B8A=";
+            };
 
-          pnpmDeps = pkgs.fetchPnpmDeps {
-            inherit pname src version;
-            fetcherVersion = 4;
-            hash = "sha256-bEhiITFhnsLxXz4nVHxE2FFbBb3kXr53KM46s5P3B8A=";
-          };
+            buildPhase = "pnpm build";
+            installPhase = "cp -r dist $out";
+          });
 
-          buildPhase = "pnpm build";
-          installPhase = "cp -r dist $out";
+          default = pkgs.linkFarmFromDrvs "lifegpu" [ web ];
         };
 
         devShells.default = pkgs.mkShell {
